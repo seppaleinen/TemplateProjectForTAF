@@ -8,7 +8,7 @@ import se.claremont.autotest.guidriverpluginstructure.websupport.webdriverglueco
  * Created by jordam on 2016-12-04.
  */
 public class TestActions {
-    TestCase testCase;
+    private TestCase testCase;
     WebInteractionMethods web;
     NavigationMechanisms nav;
 

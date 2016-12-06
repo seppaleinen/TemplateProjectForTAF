@@ -90,6 +90,7 @@
 
     <modules>
         <module>original</module>
+        <module>rest</module>
     </modules>
 
 </project>
