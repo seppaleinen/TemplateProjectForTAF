@@ -1,22 +1,28 @@
 package se.claremont.test1;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import se.claremont.autotest.common.Settings;
 import se.claremont.autotest.common.TestRun;
 import se.claremont.autotest.common.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.TestSet;
-import se.claremont.autotest.restsupport.RestGetRequest;
-import se.claremont.autotest.restsupport.RestPostRequest;
-import se.claremont.autotest.restsupport.RestRequest;
 import se.claremont.autotest.restsupport.RestResponse;
+import se.claremont.autotest.restsupport.RestSupport;
+
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -28,18 +34,10 @@ public class RestIntegrationTest extends TestSet {
 
     @Rule
     public TestName currentTestName = new TestName();
-    private RestActions app;
+    private RestSupport restSupport;
 
     @BeforeClass
     public static void classSetup(){
-        /**
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_REPORT_RECIPIENTS_COMMA_SEPARATED_LIST_OF_ADDRESSES, "no.no@no.no");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_ADDRESS, "smtp.google.com");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SENDER_ADDRESS, "mailrelay@gmail.com");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SERVER_PORT, "25");
-        TestRun.settings.setValue(Settings.SettingParameters.EMAIL_SMTP_OR_GMAIL, "SMTP");
-         **/
-
         TestRun.settings.setValue(Settings.SettingParameters.PATH_TO_LOGO, "http://46.101.193.212/TAF/images/claremontlogo.gif");
 
         //Base log folder is a TAF folder under user home folder
@@ -52,12 +50,16 @@ public class RestIntegrationTest extends TestSet {
     @Before
     public void setup() {
         startUpTestCase(currentTestName.getMethodName());
+        restSupport = new RestSupport(currentTestCase);
     }
 
     @Test
     public void whenPostHello_ExpectResponseWorld() {
-        RestPostRequest restRequest = new RestPostRequest("http://localhost:" + port + "/hello", "application/text", "");
-        RestResponse response = restRequest.execute();
+        RestResponse response = restSupport.responseFromPostRequest(
+                "http://localhost:" + port + "/hello",
+                MediaType.ALL_VALUE,
+                "");
+
 
         assertEquals(String.valueOf(HttpStatus.OK.value()), response.responseCode);
         assertEquals("world", response.body);
@@ -65,9 +67,29 @@ public class RestIntegrationTest extends TestSet {
 
     @Test
     public void whenGetHello_ExpectResponseWorld() {
-        RestRequest restRequest = new RestGetRequest("http://localhost:" + port + "/hello");
-        RestResponse response = restRequest.execute();
+        RestResponse response = restSupport.responseFromGetRequest(
+                "http://localhost:" + port + "/hello");
 
+        assertFalse(response.isSuccessful());
+        assertEquals(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()), response.responseCode);
+    }
+
+    @Test
+    public void whenPutHello_ExpectResponseWorld() {
+        RestResponse response = restSupport.responseFromPutRequest(
+                "http://localhost:" + port + "/hello",
+                MediaType.ALL_VALUE,
+                "");
+
+        assertFalse(response.isSuccessful());
+        assertEquals(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()), response.responseCode);
+    }
+
+    @Test
+    public void whenDeleteHello_ExpectResponseWorld() {
+        RestResponse response = restSupport.responseFromDeleteRequest("http://localhost:" + port + "/hello");
+
+        assertFalse(response.isSuccessful());
         assertEquals(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()), response.responseCode);
     }
 
