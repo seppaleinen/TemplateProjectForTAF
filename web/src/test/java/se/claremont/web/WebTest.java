@@ -15,8 +15,8 @@ import se.claremont.autotest.common.Settings;
 import se.claremont.autotest.common.TestRun;
 import se.claremont.autotest.common.TestRunReporterHtmlSummaryReportFile;
 import se.claremont.autotest.common.TestSet;
+import se.claremont.web.support.TestActions;
 
-import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(

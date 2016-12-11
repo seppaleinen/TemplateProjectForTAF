@@ -1,4 +1,4 @@
-package se.claremont.web;
+package se.claremont.web.support;
 
 import se.claremont.autotest.common.TestCase;
 
