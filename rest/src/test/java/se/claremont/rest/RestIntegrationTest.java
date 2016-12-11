@@ -1,4 +1,4 @@
-package se.claremont.test1;
+package se.claremont.rest;
 
 import org.junit.After;
 import org.junit.AfterClass;
