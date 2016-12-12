@@ -51,6 +51,7 @@ public class WebTest extends TestSet {
     public void test_get_hellopage() {
         app.getWeb().navigate("http://localhost:" + port + "/hello");
         app.getWeb().verifyPageTitle("Hello world");
+        //app.getWeb().verifyCurrentPageSourceWithW3validator(true);
     }
 
     @Test

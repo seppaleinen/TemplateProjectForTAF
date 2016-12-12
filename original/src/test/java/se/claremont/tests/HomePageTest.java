@@ -11,7 +11,7 @@ import se.claremont.autotest.common.TestSet;
 /**
  * Created by jordam on 2016-12-04.
  */
-public class HomePageTests extends TestSet {
+public class HomePageTest extends TestSet {
     @Rule public TestName currentTestName = new TestName();
     private TestActions app;
 
@@ -60,7 +60,7 @@ public class HomePageTests extends TestSet {
         app.checkLandingPageLinks();
         app.checkLandingPageLayout();
         app.checkLandingPageTexts();
-        app.checkLandingPageWithW3CValidator();
+        //app.checkLandingPageWithW3CValidator();
     }
 
 
